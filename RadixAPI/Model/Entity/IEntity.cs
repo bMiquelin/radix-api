@@ -1,4 +1,4 @@
-namespace RadixAPI.Model
+namespace RadixAPI.Model.Entity
 {
     public abstract class DbEntity<T>
     {

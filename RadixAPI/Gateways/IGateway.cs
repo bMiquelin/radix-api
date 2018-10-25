@@ -4,6 +4,6 @@ namespace RadixAPI.Gateways
 {
     public interface IGateway
     {
-        
+
     }
 }

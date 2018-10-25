@@ -1,6 +1,6 @@
 using System;
 
-namespace RadixAPI.Model
+namespace RadixAPI.Model.Entity
 {
     public class Transaction : DbEntity<Guid>
     {
