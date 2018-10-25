@@ -4,7 +4,7 @@ namespace RadixAPI.Gateways.Cielo
 {
     public class CieloGateway : IGateway
     {
-        const string API_URL = "https://apisandbox.cieloecommerce.cielo.com.br/";
+        const string API_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
         private readonly RestClient client;
 
         public CieloGateway()
