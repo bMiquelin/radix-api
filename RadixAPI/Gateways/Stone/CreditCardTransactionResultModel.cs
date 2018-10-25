@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RadixAPI.Gateways.Stone
 {
-    public class CreditCardTransactionResult
+    public class CreditCardTransactionResultModel
     {
         public string AcquirerMessage { get; set; }
         public string AcquirerName { get; set; }

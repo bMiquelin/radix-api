@@ -13,7 +13,7 @@ namespace RadixAPI.Gateways.Stone
         public string RequestKey { get; set; }
         public List<object> BoletoTransactionResultCollection { get; set; }
         public string BuyerKey { get; set; }
-        public List<CreditCardTransactionResult> CreditCardTransactionResultCollection { get; set; }
+        public List<CreditCardTransactionResultModel> CreditCardTransactionResultCollection { get; set; }
         public OrderResultModel OrderResult { get; set; }
     }
 }

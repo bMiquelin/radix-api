@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RadixAPI.Model.Entity
 {
-    public class StoreGatewayRule
+    public class StoreGatewayRule : DbEntity<int>
     {
         [Required]
         public Store Store { get; set; }
@@ -17,6 +17,8 @@ namespace RadixAPI.Model.Entity
         [MaxLength(10)]
         [Required]
         public string Brand { get; set; }
+
+        public int Priority { get; set; }
 
         [Required]
         public Gateways.GatewayEnum Gateway { get; set; }

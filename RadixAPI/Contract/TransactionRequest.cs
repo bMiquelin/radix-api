@@ -8,5 +8,6 @@ namespace RadixAPI.Contract
     public class TransactionRequest
     {
         public object CreditCard { get; set; }
+        public string Brand { get; set; }
     }
 }
