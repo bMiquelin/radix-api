@@ -1,19 +1,18 @@
 # Radix API  
 
-Repository dedicated to the Radix challenge. 
+Repository dedicated to the [Radix](http://www.radixeng.com.br/) challenge. ([Here](https://gitlab.com/radix.recruit/developer-challenge/blob/master/desafio-pleno-senior.txt))
 
-This project was built using [.Net Core CLI v2.1.403](https://www.microsoft.com/net/download) with `dotnet new webapi --name RadixAPI`.  
-
-https://gitlab.com/radix.recruit/developer-challenge/blob/master/desafio-pleno-senior.txt
+This project was bootstrapped using [.Net Core CLI v2.1.403](https://www.microsoft.com/net/download) with `dotnet new webapi --name RadixAPI`.  
 
 ## API Documentation
 
-https://documenter.getpostman.com/view/3767728/RWgxvbA9#6cacd6f9-dc6a-4f99-8f4c-408fae07fcdd
+Documentation made using postman. Click [here](https://documenter.getpostman.com/view/3767728/RWgxvbA9).
 
 ## Host
 
 This application and it's database is hosted at Azure.
-Sample GET: http://radix-api.azurewebsites.net/api/gateway
+
+Base URL: https://radix-api.azurewebsites.net/
 
 ## How to Build  
 
