@@ -13,6 +13,10 @@ https://gitlab.com/radix.recruit/developer-challenge/blob/master/desafio-pleno-s
     dotnet ef database update --project RadixAPI --startup-project RadixAPI
     dotnet run --project RadixAPI
 
+## To add Migrations:
+
+    dotnet ef migrations add XXXXXX --project RadixAPI --startup-project RadixAPI
+
 # Specification
 
 Você foi contratado para implementar um gateway de pagamentos. Um Gateway de pagamentos é um sistema capaz de enviar requisições de compras, por exemplo cartão de crédito, para empresas processadoras de pagamentos, as chamadas adquirentes, e oferece ao lojista um unico ponto de integraçao para várias adquirentes, a vantagem de se usar um gateway é que com apenas um contrato de integração o lojista poderá se integrar com várias empresas de pagamentos e com sistemas antifraudes.
