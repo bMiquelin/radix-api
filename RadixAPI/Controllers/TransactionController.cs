@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RadixAPI.Authorization;
 using RadixAPI.Contract;
 using RadixAPI.Data;
 using RadixAPI.Managers;
@@ -12,6 +14,7 @@ namespace RadixAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ServiceFilter(typeof(StoreAuthorization))]
     public class TransactionController : ControllerBase
     {
         private readonly RadixAPIContext ctx;

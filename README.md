@@ -10,7 +10,7 @@ https://gitlab.com/radix.recruit/developer-challenge/blob/master/desafio-pleno-s
 ## How to Build  
 
     git clone https://gitlab.com/bMiquelin/radix-api.git
-    dotnet ef database update
+    dotnet ef database update --project RadixAPI --startup-project RadixAPI
     dotnet run --project RadixAPI
 
 # Specification
