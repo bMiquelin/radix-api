@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RadixAPI.Data;
 
 namespace RadixAPI.Migrations
 {
     [DbContext(typeof(RadixAPIContext))]
-    partial class RadixAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20181026020921_GatewayRules")]
+    partial class GatewayRules
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,13 +45,14 @@ namespace RadixAPI.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Brand")
+                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.Property<int>("Gateway");
 
                     b.Property<int>("Priority");
 
-                    b.Property<Guid>("StoreId");
+                    b.Property<Guid?>("StoreId");
 
                     b.HasKey("Id");
 
@@ -63,25 +66,9 @@ namespace RadixAPI.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Amount");
-
                     b.Property<string>("Brand");
 
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("Gateway");
-
-                    b.Property<string>("Holder");
-
-                    b.Property<string>("LastDigits");
-
-                    b.Property<bool>("NeedAntiFraud");
-
                     b.Property<Guid?>("StoreId");
-
-                    b.Property<bool>("Success");
-
-                    b.Property<bool>("SuccessAntiFraud");
 
                     b.HasKey("Id");
 
@@ -94,8 +81,7 @@ namespace RadixAPI.Migrations
                 {
                     b.HasOne("RadixAPI.Model.Entity.Store", "Store")
                         .WithMany("StoreGatewayRules")
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("StoreId");
                 });
 
             modelBuilder.Entity("RadixAPI.Model.Entity.Transaction", b =>

@@ -15,7 +15,7 @@ namespace RadixAPI.Gateways.Stone
         public int AmountInCents { get; set; }
 
         [Required]
-        public CreditCardModel MyProperty { get; set; }
+        public CreditCardModel CreditCard { get; set; }
 
         /// <summary>
         /// Número de Parcelas

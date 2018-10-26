@@ -9,16 +9,16 @@ namespace RadixAPI.Managers
 {
     public class GatewayRuleManager
     {
-        public static IGateway PickGateway(string brand, IEnumerable<StoreGatewayRule> rules)
+        public static GatewayEnum PickGateway(string brand, IEnumerable<StoreGatewayRule> rules)
         {
             foreach(var rule in rules)
             {
                 if (string.IsNullOrWhiteSpace(rule.Brand)
                     ||
                     brand.Equals(rule.Brand, StringComparison.InvariantCultureIgnoreCase))
-                    return GatewayIterator.GetGateway(rule.Gateway);
+                    return rule.Gateway;
             }
-            return null;
+            throw new ArgumentOutOfRangeException();
         }
     }
 }

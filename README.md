@@ -6,6 +6,9 @@ This project was built using [.Net Core CLI v2.1.403](https://www.microsoft.com/
 
 https://gitlab.com/radix.recruit/developer-challenge/blob/master/desafio-pleno-senior.txt
 
+## API Documentation
+
+https://documenter.getpostman.com/view/3767728/RWgxvbA9#6cacd6f9-dc6a-4f99-8f4c-408fae07fcdd
 
 ## How to Build  
 

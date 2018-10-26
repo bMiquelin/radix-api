@@ -18,7 +18,6 @@ namespace RadixAPI.Controllers
     public class StoreController : ControllerBase
     {
         private readonly RadixAPIContext ctx;
-        private readonly Guid storeId;
         public StoreController(RadixAPIContext ctx)
         {
             this.ctx = ctx;
@@ -27,17 +26,40 @@ namespace RadixAPI.Controllers
         [ServiceFilter(typeof(StoreAuthorization))]
         public ActionResult<Store> Get()
         {
-            var storeId = Guid.Parse(Response.Headers["StoreId"]);
+            var storeId = Guid.Parse(Request.Headers["STORE_ID"]);
             return ctx.Stores
                 .Include(store => store.StoreGatewayRules)
-                .FirstOrDefault(store => store.Id == this.storeId);
+                .FirstOrDefault(store => store.Id == storeId);
         }
 
             
         [HttpPost]
-        public void Post([FromBody] Store store)
+        public object Post([FromBody] NewStoreRequest newStoreRequest)
         {
-            this.ctx.Stores.Add(store);
+            var store = new Store {
+                AntiFraud = newStoreRequest.AntiFraud,
+                API_KEY = Guid.NewGuid(),
+                Name = newStoreRequest.Name,
+                StoreGatewayRules = newStoreRequest.StoreGatewayRules.Select(sgr => new StoreGatewayRule {
+                    Brand = sgr.Brand,
+                    Gateway = sgr.Gateway,
+                    Priority = sgr.Priority
+                }).ToList()
+            };
+            if (!store.StoreGatewayRules.Any(r => r.Brand == null))
+                return new ErrorResult("Need at least one default rule");
+
+            var addedStore = this.ctx.Stores.Add(store).Entity;
+            foreach(var rule in store.StoreGatewayRules)
+            {
+                rule.Store = addedStore;
+                this.ctx.StoreGatewayRule.Add(rule);
+            }
+            this.ctx.SaveChanges();
+            return new {
+                store_id = store.Id,
+                api_key = store.API_KEY
+            };
         }
     }
 }

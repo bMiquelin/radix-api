@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using RadixAPI.Contract;
+using RestSharp;
 
 namespace RadixAPI.Gateways.Stone
 {
@@ -12,12 +13,17 @@ namespace RadixAPI.Gateways.Stone
             this.client = new RestClient();
         }
 
-        private void Sale(SaleRequestModel srm)
+        bool IGateway.MakeTransaction(TransactionRequest transactionRequest)
+        {
+            return true;
+        }
+
+        private IRestResponse<SaleResponseModel> Sale(SaleRequestModel srm)
         {
             var request = new RestRequest($"{API_URL}/Sale", Method.POST);
             request.AddBody(srm);
 
-            var response = client.Execute<SaleResponseModel>(request);
+            return client.Execute<SaleResponseModel>(request);
         }
     }
 }

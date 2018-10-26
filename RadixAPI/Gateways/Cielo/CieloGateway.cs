@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using RadixAPI.Contract;
+using RestSharp;
 
 namespace RadixAPI.Gateways.Cielo
 {
@@ -12,12 +13,17 @@ namespace RadixAPI.Gateways.Cielo
             this.client = new RestClient();
         }
 
-        private void Sales(SalesRequestModel srm)
+        bool IGateway.MakeTransaction(TransactionRequest transactionRequest)
+        {
+            return true;
+        }
+
+        private IRestResponse<SalesResponseModel> Sales(SalesRequestModel srm)
         {
             var request = new RestRequest($"{API_URL}/1/sales",Method.POST);
             request.AddBody(srm);
 
-            var response = client.Execute<SalesResponseModel>(request);
+            return client.Execute<SalesResponseModel>(request);
         }
     }
 }

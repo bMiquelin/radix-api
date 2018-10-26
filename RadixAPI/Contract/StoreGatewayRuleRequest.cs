@@ -3,18 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace RadixAPI.Model.Entity
+namespace RadixAPI.Contract
 {
-    public class StoreGatewayRule : DbEntity<int>
+    public class StoreGatewayRuleRequest
     {
-        [Required]
-        public Store Store { get; set; }
-
-        /// <summary>
-        /// CreditCard brand (Visa / Master / Amex / Elo / Aura / JCB / Diners / Discover / Hipercard)
-        /// </summary>
         [MaxLength(10)]
         public string Brand { get; set; }
 

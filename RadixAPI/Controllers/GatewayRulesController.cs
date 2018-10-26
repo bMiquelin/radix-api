@@ -23,7 +23,7 @@ namespace RadixAPI.Controllers
         public GatewayRulesController(RadixAPIContext ctx)
         {
             this.ctx = ctx;
-            this.storeId = Guid.Parse(Response.Headers["StoreId"]);
+            this.storeId = Guid.Parse(Request.Headers["STORE_ID"]);
         }
 
         [HttpGet]
