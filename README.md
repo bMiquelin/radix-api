@@ -10,6 +10,11 @@ https://gitlab.com/radix.recruit/developer-challenge/blob/master/desafio-pleno-s
 
 https://documenter.getpostman.com/view/3767728/RWgxvbA9#6cacd6f9-dc6a-4f99-8f4c-408fae07fcdd
 
+## Host
+
+This application and it's database is hosted at Azure.
+Sample GET: http://radix-api.azurewebsites.net/api/gateway
+
 ## How to Build  
 
     git clone https://gitlab.com/bMiquelin/radix-api.git
