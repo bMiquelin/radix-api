@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using RadixAPI.Providers;
 using System;
 
@@ -5,6 +6,7 @@ namespace RadixAPI.Model.Entity
 {
     public class Transaction : DbEntity<Guid>
     {
+        [JsonIgnore]
         public Store Store { get; set; }
         public DateTime Date { get; set; }
         public string Brand { get; set; }

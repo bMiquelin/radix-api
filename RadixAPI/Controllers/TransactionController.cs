@@ -30,6 +30,7 @@ namespace RadixAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Transaction>> Get() => ctx.Transactions
             .Where(tran => tran.Store.Id == StoreId)
+            .OrderByDescending(x => x.Date)
             .ToArray();
 
         [HttpGet("{id}")]
@@ -44,7 +45,6 @@ namespace RadixAPI.Controllers
             {
                 var store = ctx.Stores.Include(i => i.StoreProviderRules).First(s => s.Id == StoreId);
                 var transaction = transactionManager.CreateTransaction(store, transactionRequest);
-                transaction.Store = null;
                 return transaction;
             }
             catch(APIException ex)
