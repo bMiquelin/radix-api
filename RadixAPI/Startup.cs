@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using RadixAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using RadixAPI.Authorization;
+using RadixAPI.Managers;
 
 namespace RadixAPI
 {
@@ -30,6 +31,7 @@ namespace RadixAPI
         {
             services.AddDbContext<RadixAPIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Azure")));
             services.AddScoped<StoreAuthorization>();
+            services.AddTransient<TransactionManager>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

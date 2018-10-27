@@ -1,24 +1,23 @@
-﻿using RadixAPI.Gateways;
+﻿using RadixAPI.Providers;
 using RadixAPI.Model.Entity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using RadixAPI.Exceptions;
 
 namespace RadixAPI.Managers
 {
-    public class GatewayRuleManager
+    public class ProviderRuleManager
     {
-        public static GatewayEnum PickGateway(string brand, IEnumerable<StoreGatewayRule> rules)
+        public static ProviderEnum PickProvider(string brand, IEnumerable<StoreProviderRule> rules)
         {
             foreach(var rule in rules)
             {
                 if (string.IsNullOrWhiteSpace(rule.Brand)
                     ||
                     brand.Equals(rule.Brand, StringComparison.InvariantCultureIgnoreCase))
-                    return rule.Gateway;
+                    return rule.Provider;
             }
-            throw new ArgumentOutOfRangeException();
+            throw new StoreException("No provider rules defined for the store");
         }
     }
 }

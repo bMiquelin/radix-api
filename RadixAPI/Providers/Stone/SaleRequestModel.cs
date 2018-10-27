@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
-namespace RadixAPI.Gateways.Stone
+namespace RadixAPI.Providers.Stone
 {
     public class SaleRequestModel
     {

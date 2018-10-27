@@ -28,7 +28,7 @@ namespace RadixAPI.Controllers
         {
             var storeId = Guid.Parse(Request.Headers["STORE_ID"]);
             return ctx.Stores
-                .Include(store => store.StoreGatewayRules)
+                .Include(store => store.StoreProviderRules)
                 .FirstOrDefault(store => store.Id == storeId);
         }
 
@@ -40,20 +40,20 @@ namespace RadixAPI.Controllers
                 AntiFraud = newStoreRequest.AntiFraud,
                 API_KEY = Guid.NewGuid(),
                 Name = newStoreRequest.Name,
-                StoreGatewayRules = newStoreRequest.StoreGatewayRules.Select(sgr => new StoreGatewayRule {
+                StoreProviderRules = newStoreRequest.StoreProviderRules.Select(sgr => new StoreProviderRule {
                     Brand = sgr.Brand,
-                    Gateway = sgr.Gateway,
+                    Provider = sgr.Provider,
                     Priority = sgr.Priority
                 }).ToList()
             };
-            if (!store.StoreGatewayRules.Any(r => r.Brand == null))
+            if (!store.StoreProviderRules.Any(r => r.Brand == null))
                 return new ErrorResult("Need at least one default rule");
 
             var addedStore = this.ctx.Stores.Add(store).Entity;
-            foreach(var rule in store.StoreGatewayRules)
+            foreach(var rule in store.StoreProviderRules)
             {
                 rule.Store = addedStore;
-                this.ctx.StoreGatewayRule.Add(rule);
+                this.ctx.StoreProviderRules.Add(rule);
             }
             this.ctx.SaveChanges();
             return new {

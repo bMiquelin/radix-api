@@ -1,4 +1,4 @@
-using RadixAPI.Gateways;
+using RadixAPI.Providers;
 using System;
 
 namespace RadixAPI.Model.Entity
@@ -8,7 +8,7 @@ namespace RadixAPI.Model.Entity
         public Store Store { get; set; }
         public DateTime Date { get; set; }
         public string Brand { get; set; }
-        public GatewayEnum Gateway { get; set; }
+        public ProviderEnum Provider { get; set; }
         public int Amount { get; set; }
         public bool NeedAntiFraud { get; set; }
         public bool SuccessAntiFraud { get; set; }

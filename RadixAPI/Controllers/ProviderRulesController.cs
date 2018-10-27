@@ -16,18 +16,18 @@ namespace RadixAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ServiceFilter(typeof(StoreAuthorization))]
-    public class GatewayRulesController : ControllerBase
+    public class ProviderRulesController : ControllerBase
     {
         private readonly RadixAPIContext ctx;
         private readonly Guid storeId;
-        public GatewayRulesController(RadixAPIContext ctx)
+        public ProviderRulesController(RadixAPIContext ctx)
         {
             this.ctx = ctx;
             this.storeId = Guid.Parse(Request.Headers["STORE_ID"]);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<StoreGatewayRule>> Get() => ctx.StoreGatewayRule
+        public ActionResult<IEnumerable<StoreProviderRule>> Get() => ctx.StoreProviderRules
             .Where(rule => rule.Store.Id == this.storeId)
             .ToArray();
     }

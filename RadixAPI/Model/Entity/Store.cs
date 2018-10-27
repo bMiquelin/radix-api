@@ -12,7 +12,7 @@ namespace RadixAPI.Model.Entity
         
         public bool AntiFraud { get; set; }
 
-        public ICollection<StoreGatewayRule> StoreGatewayRules { get; set; }
+        public ICollection<StoreProviderRule> StoreProviderRules { get; set; }
 
         [JsonIgnore]
         public Guid API_KEY { get; set; }

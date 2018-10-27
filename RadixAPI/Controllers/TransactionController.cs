@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RadixAPI.Authorization;
 using RadixAPI.Contract;
 using RadixAPI.Data;
-using RadixAPI.Gateways;
+using RadixAPI.Providers;
 using RadixAPI.Managers;
 using RadixAPI.Model.Entity;
+using RadixAPI.Exceptions;
 
 namespace RadixAPI.Controllers
 {
@@ -24,6 +23,7 @@ namespace RadixAPI.Controllers
         public TransactionController(RadixAPIContext ctx, TransactionManager transactionManager)
         {
             this.ctx = ctx;
+            this.transactionManager = transactionManager;
         }
         public Guid StoreId { get { return Guid.Parse(Request.Headers["STORE_ID"]); } }
 
@@ -40,10 +40,21 @@ namespace RadixAPI.Controllers
         [HttpPost]
         public object Post([FromBody] TransactionRequest transactionRequest)
         {
-            var store = ctx.Stores.Include(i => i.StoreGatewayRules).First(s => s.Id == StoreId);
-
-            var transaction = transactionManager.CreateTransaction(store, transactionRequest);
-            return transaction;
+            try
+            {
+                var store = ctx.Stores.Include(i => i.StoreProviderRules).First(s => s.Id == StoreId);
+                var transaction = transactionManager.CreateTransaction(store, transactionRequest);
+                transaction.Store = null;
+                return transaction;
+            }
+            catch(APIException ex)
+            {
+                return ex.ToErrorResult();
+            }
+            catch (Exception)
+            {
+                return new ErrorResult("An error occurred");
+            }
         }
     }
 }

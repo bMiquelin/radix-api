@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace RadixAPI.Gateways.Cielo
+namespace RadixAPI.Providers.Cielo
 {
-    public class CustomerAddressModel
+    public class CustomerDeliveryAddressModel
     {
         /// <summary>
         /// Endereço do Comprador.
@@ -15,13 +11,7 @@ namespace RadixAPI.Gateways.Cielo
         public string Street { get; set; }
 
         /// <summary>
-        /// Número do endereço do Comprador.
-        /// </summary>
-        [MaxLength(15)]
-        public string Number { get; set; }
-
-        /// <summary>
-        /// Complemento do endereço do Comprador.br
+        /// Complemento do endereço do Comprador.
         /// </summary>
         [MaxLength(50)]
         public string Complement { get; set; }

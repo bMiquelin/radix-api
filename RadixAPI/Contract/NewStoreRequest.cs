@@ -8,11 +8,14 @@ namespace RadixAPI.Contract
 {
     public class NewStoreRequest
     {
+        [Required]
         [MaxLength(255)]
         public string Name { get; set; }
 
+        [Required]
         public bool AntiFraud { get; set; }
 
-        public ICollection<StoreGatewayRuleRequest> StoreGatewayRules { get; set; }
+        [Required]
+        public ICollection<StoreProviderRuleRequest> StoreProviderRules { get; set; }
     }
 }

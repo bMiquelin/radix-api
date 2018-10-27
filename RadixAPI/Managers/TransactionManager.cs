@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RadixAPI.Contract;
+﻿using RadixAPI.Contract;
 using RadixAPI.Data;
-using RadixAPI.Gateways;
+using RadixAPI.Providers;
 using RadixAPI.Model.Entity;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RadixAPI.Managers
 {
@@ -18,16 +15,37 @@ namespace RadixAPI.Managers
             this.ctx = ctx;
         }
 
+        private ProviderEnum GetProviderByRules(Store store, string brand)
+        {
+            var providerRules = store.StoreProviderRules.OrderBy(rule => rule.Priority);
+            return ProviderRuleManager.PickProvider(brand, providerRules);
+        }
+
+        private bool CheckAntifraud(ref Transaction transaction)
+        {
+            if (!transaction.Store.AntiFraud) return true;
+
+
+
+            transaction.SuccessAntiFraud = true;
+            return true;
+        }
+
+        private bool MakeProviderTransaction(ref Transaction transaction, TransactionRequest transactionRequest)
+        {
+            var providerInstance = ProviderIterator.CreateProviderInstance(transaction.Provider);
+            var transactionResult = providerInstance.MakeTransaction(transaction.Id, transactionRequest);
+            transaction.Success = transactionResult;
+            return true;
+        }
+
         public Transaction CreateTransaction(Store store, TransactionRequest transactionRequest)
         {
-            var gatewayRules = store.StoreGatewayRules.OrderBy(rule => rule.Priority);
-            var gateway = GatewayRuleManager.PickGateway(transactionRequest.CreditCard.Brand, gatewayRules);
-
             var transaction = ctx.Transactions.Add(new Transaction
             {
                 Store = store,
                 Date = DateTime.UtcNow,
-                Gateway = gateway,
+                Provider = GetProviderByRules(store, transactionRequest.CreditCard.Brand),
                 Brand = transactionRequest.CreditCard.Brand,
                 Amount = transactionRequest.Amount,
                 NeedAntiFraud = store.AntiFraud,
@@ -35,15 +53,10 @@ namespace RadixAPI.Managers
                 Holder = transactionRequest.CreditCard.Holder
             }).Entity;
 
-            if (store.AntiFraud)
-            {
-                transaction.SuccessAntiFraud = true;
-                return transaction;
-            }
+            if (!CheckAntifraud(ref transaction)) return transaction;
 
-            var gatewayInstance = GatewayIterator.GetGateway(gateway);
-            var transactionResult = gatewayInstance.MakeTransaction(transactionRequest);
-            transaction.Success = true;
+            if (!MakeProviderTransaction(ref transaction, transactionRequest)) return transaction;
+
             ctx.SaveChanges();
             return transaction;
         }

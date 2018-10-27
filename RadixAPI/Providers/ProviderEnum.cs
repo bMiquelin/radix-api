@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RadixAPI.Gateways
+namespace RadixAPI.Providers
 {
-    public enum GatewayEnum
+    public enum ProviderEnum
     {
         Cielo = 0,
         Stone = 1

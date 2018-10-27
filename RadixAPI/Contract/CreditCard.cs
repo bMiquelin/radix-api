@@ -23,8 +23,8 @@ namespace RadixAPI.Contract
         [MaxLength(25)]
         public string Holder { get; set; }
 
-        [MaxLength(4)]
-        public string SecurityCode { get; set; }
+        [Range(111,9999)]
+        public int SecurityCode { get; set; }
 
     }
 }

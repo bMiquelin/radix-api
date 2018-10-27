@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using RadixAPI.Providers;
 
 namespace RadixAPI.Model.Entity
 {
-    public class StoreGatewayRule : DbEntity<int>
+    public class StoreProviderRule : DbEntity<int>
     {
         [Required]
         public Store Store { get; set; }
@@ -22,6 +23,6 @@ namespace RadixAPI.Model.Entity
         public int Priority { get; set; }
 
         [Required]
-        public Gateways.GatewayEnum Gateway { get; set; }
+        public ProviderEnum Provider { get; set; }
     }
 }
