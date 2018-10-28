@@ -4,15 +4,21 @@ using RadixAPI.Providers;
 using RadixAPI.Model.Entity;
 using System;
 using System.Linq;
+using RadixAPI.AntiFraud;
+using RadixAPI.Exceptions;
 
 namespace RadixAPI.Managers
 {
     public class TransactionManager
     {
         private readonly RadixAPIContext ctx;
-        public TransactionManager(RadixAPIContext ctx)
+        private readonly ProviderIterator providerIterator;
+        private readonly IAntiFraudProvider antiFraudProvider;
+        public TransactionManager(RadixAPIContext ctx, ProviderIterator providerIterator, IAntiFraudProvider antiFraudProvider)
         {
             this.ctx = ctx;
+            this.providerIterator = providerIterator;
+            this.antiFraudProvider = antiFraudProvider;
         }
 
         private ProviderEnum GetProviderByRules(Store store, string brand)
@@ -21,22 +27,38 @@ namespace RadixAPI.Managers
             return ProviderRuleManager.PickProvider(brand, providerRules);
         }
 
-        private bool CheckAntifraud(ref Transaction transaction)
+        private bool CheckAntifraud(ref Transaction transaction, TransactionRequest transactionRequest)
         {
             if (!transaction.Store.AntiFraud) return true;
 
+            try
+            {
+                transaction.SuccessAntiFraud = antiFraudProvider.Validate(transactionRequest);
+            }
+            catch (AntiFraudException ex)
+            {
+                transaction.ErrorMessage = ex.Message;
+                transaction.SuccessAntiFraud = false;
+            }
 
-
-            transaction.SuccessAntiFraud = true;
-            return true;
+            return transaction.SuccessAntiFraud;
         }
 
         private bool MakeProviderTransaction(ref Transaction transaction, TransactionRequest transactionRequest)
         {
-            var providerInstance = ProviderIterator.CreateProviderInstance(transaction.Provider);
-            var transactionResult = providerInstance.MakeTransaction(transaction.Id, transactionRequest);
-            transaction.Success = transactionResult;
-            return true;
+            var providerInstance = providerIterator.CreateProviderInstance(transaction.Provider);
+
+            try
+            {
+                transaction.Success = providerInstance.MakeTransaction(transaction.Id, transactionRequest);
+            }
+            catch (ProviderException ex)
+            {
+                transaction.ErrorMessage = ex.Message;
+                transaction.Success = false;
+            }
+
+            return transaction.Success;
         }
 
         public Transaction CreateTransaction(Store store, TransactionRequest transactionRequest)
@@ -53,7 +75,7 @@ namespace RadixAPI.Managers
                 Holder = transactionRequest.CreditCard.Holder
             }).Entity;
 
-            if (!CheckAntifraud(ref transaction)) return transaction;
+            if (!CheckAntifraud(ref transaction, transactionRequest)) return transaction;
 
             if (!MakeProviderTransaction(ref transaction, transactionRequest)) return transaction;
 

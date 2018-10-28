@@ -1,4 +1,6 @@
-﻿using RadixAPI.Contract;
+﻿using Microsoft.Extensions.Configuration;
+using RadixAPI.Contract;
+using RadixAPI.Exceptions;
 using RadixAPI.Helper;
 using RestSharp;
 using System;
@@ -8,12 +10,14 @@ namespace RadixAPI.Providers.Stone
 {
     public class Stone : IProvider
     {
-        const string API_URL = "https://transaction.stone.com.br";
         private readonly RestClient client;
+        private readonly string MerchantKey;
 
-        public Stone()
+        public Stone(IConfiguration configuration)
         {
-            this.client = new RestClient();
+            var settings = configuration.GetSection($"Providers:{nameof(Stone)}");
+            this.MerchantKey = settings[nameof(MerchantKey)];
+            this.client = new RestClient(settings["API_URL"]);
         }
 
         private SaleRequestModel PrepareModel(Guid transactionId, TransactionRequest transactionRequest)
@@ -24,8 +28,7 @@ namespace RadixAPI.Providers.Stone
                 CreditCardTransactionCollection = new Collection<CreditCardTransactionModel>
                 {
                     new CreditCardTransactionModel
-                    {
-
+                    {                        
                         AmountInCents = transactionRequest.Amount,
                         CreditCard = new CreditCardModel{
                             CreditCardBrand = transactionRequest.CreditCard.Brand,
@@ -50,13 +53,17 @@ namespace RadixAPI.Providers.Stone
             var model = PrepareModel(transactionId, transactionRequest);
             var response = Sale(model);
 
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new ProviderException("Failed to finish transaction");
+
+            return true;
         }
 
         private IRestResponse<SaleResponseModel> Sale(SaleRequestModel srm)
         {
-            var request = new RestRequest($"{API_URL}/Sale", Method.POST);
+            var request = new RestRequest("/Sale", Method.POST, DataFormat.Json);
             request.AddBody(srm);
+            request.AddHeader(nameof(MerchantKey), MerchantKey);
 
             return client.Execute<SaleResponseModel>(request);
         }

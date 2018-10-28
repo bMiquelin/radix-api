@@ -51,7 +51,7 @@ namespace RadixAPI.Controllers
             {
                 return ex.ToErrorResult();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new ErrorResult("An error occurred");
             }

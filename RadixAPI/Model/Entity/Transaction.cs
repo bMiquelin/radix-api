@@ -17,5 +17,6 @@ namespace RadixAPI.Model.Entity
         public string LastDigits { get; set; }
         public string Holder { get; set; }
         public bool Success { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

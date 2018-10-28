@@ -1,4 +1,6 @@
-﻿using RadixAPI.Contract;
+﻿using Microsoft.Extensions.Configuration;
+using RadixAPI.Contract;
+using RadixAPI.Exceptions;
 using RestSharp;
 using System;
 
@@ -6,15 +8,21 @@ namespace RadixAPI.Providers.Cielo
 {
     public class Cielo : IProvider
     {
-        const string API_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
         const string DEFAULT_INTEREST = "ByIssuer";
-        const string MERCHANT_ID = "00020000-0000-0000-0000-000000000000";
-        const string MERCHANT_KEY = "";
-        private readonly RestClient client;
+        const string DEFAULT_IDENTITYTYPE = "CPF";
+        const string DEFAULT_STATUS = "NEW";
 
-        public Cielo()
+        private readonly RestClient client;
+        private readonly string MERCHANT_ID;
+        private readonly string MERCHANT_KEY;
+
+        public Cielo(IConfiguration configuration)
         {
-            this.client = new RestClient(API_URL);
+            var settings = configuration.GetSection($"Providers:{nameof(Cielo)}");
+            this.MERCHANT_KEY = settings[nameof(this.MERCHANT_KEY)];
+            this.MERCHANT_ID = settings[nameof(this.MERCHANT_ID)];
+
+            this.client = new RestClient(settings["API_URL"]);
         }
 
         private SalesRequestModel PrepareModel(Guid transactionId, TransactionRequest transactionRequest)
@@ -51,11 +59,11 @@ namespace RadixAPI.Providers.Cielo
                     },
                     Email = null,
                     Identity = null,
-                    IdentityType = "CPF",
+                    IdentityType = DEFAULT_IDENTITYTYPE,
                     Name = null,
-                    Status = "NEW"
+                    Status = DEFAULT_STATUS
                 },
-                MerchantId = Guid.Parse(MERCHANT_ID),
+                MerchantId = Guid.NewGuid(),
                 MerchantKey = MERCHANT_KEY,
                 MerchantOrderId = transactionId.ToString("N"),
                 Payment = new PaymentModel {
@@ -80,12 +88,15 @@ namespace RadixAPI.Providers.Cielo
             var model = PrepareModel(transactionId, transactionRequest);
             var response = Sales(model);
 
-            return response.StatusCode == System.Net.HttpStatusCode.OK;
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new ProviderException("Failed to finish transaction");
+
+            return true;
         }
 
         private IRestResponse<SalesResponseModel> Sales(SalesRequestModel srm)
         {
-            var request = new RestRequest($"/1/sales",Method.POST);
+            var request = new RestRequest($"/1/sales", Method.POST, DataFormat.Json);
             request.AddBody(srm);
 
             return client.Execute<SalesResponseModel>(request);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +14,8 @@ namespace RadixAPI.Contract
 
         [Required]
         public int Amount { get; set; }
+
+        [JsonIgnore]
+        public string IP { get; set; }
     }
 }

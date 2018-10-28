@@ -8,10 +8,7 @@ namespace RadixAPI.Data
         public DbSet<Store> Stores { get; set; }
         public DbSet<StoreProviderRule> StoreProviderRules { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public RadixAPIContext(DbContextOptions<RadixAPIContext> options) : base(options)
-        {
-
-        }
+        public RadixAPIContext(DbContextOptions<RadixAPIContext> options) : base(options) {}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => base.OnConfiguring(optionsBuilder);
     }
 }
