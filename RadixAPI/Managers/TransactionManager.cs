@@ -30,7 +30,6 @@ namespace RadixAPI.Managers
         private bool CheckAntifraud(ref Transaction transaction, TransactionRequest transactionRequest)
         {
             if (!transaction.Store.AntiFraud) return true;
-
             try
             {
                 transaction.SuccessAntiFraud = antiFraudProvider.Validate(transactionRequest);
@@ -74,6 +73,7 @@ namespace RadixAPI.Managers
                 LastDigits = transactionRequest.CreditCard.CardNumber.Substring(transactionRequest.CreditCard.CardNumber.Length - 4),
                 Holder = transactionRequest.CreditCard.Holder
             }).Entity;
+            transactionRequest.TransactionId = transaction.Id;
 
             if (!CheckAntifraud(ref transaction, transactionRequest)) return transaction;
 

@@ -21,7 +21,7 @@ namespace RadixAPI.Providers.Cielo
         public string Number { get; set; }
 
         /// <summary>
-        /// Complemento do endereço do Comprador.br
+        /// Complemento do endereço do Comprador.
         /// </summary>
         [MaxLength(50)]
         public string Complement { get; set; }

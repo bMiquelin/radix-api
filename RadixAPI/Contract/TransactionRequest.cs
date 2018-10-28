@@ -15,7 +15,37 @@ namespace RadixAPI.Contract
         [Required]
         public int Amount { get; set; }
 
-        [JsonIgnore]
+        [Required]
         public string IP { get; set; }
+
+        [Required]
+        public CustomerData ShippingData { get; set; }
+
+        [Required]
+        public CustomerData BillingData { get; set; }
+
+        [Required]
+        [MaxLength(14)]
+        public string CPF { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [JsonIgnore]
+        public Guid TransactionId { get; set; }
+
+        [JsonIgnore]
+        public string StoreName { get; set; }
+
+        [Required]
+        [MaxLength(255)]
+        public string CustomerName { get; internal set; }
+
+        /// <summary>
+        /// Texto impresso na fatura bancaria comprador
+        /// </summary>
+        [MaxLength(13)]
+        [Required]
+        public string Descriptor { get; internal set; }
     }
 }

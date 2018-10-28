@@ -25,19 +25,19 @@ namespace RadixAPI.AntiFraud.ClearSale
         public string Email { get; set; }
 
         /// <summary>
-        /// Shipping Value
+        /// Sum of Items Values
         /// </summary>
         [Required]
         public int TotalItems { get; set; }
 
         /// <summary>
-        /// Sum of Items Values
+        /// Order total Value
         /// </summary>
         [Required]
         public int TotalOrder { get; set; }
 
         /// <summary>
-        /// Order total Value
+        /// Shipping Value
         /// </summary>
         [Required]
         public int TotalShipping { get; set; }

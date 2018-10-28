@@ -8,11 +8,14 @@ namespace RadixAPI.Providers.Cielo
 {
     public class Cielo : IProvider
     {
+        const string DEFAULT_PAYMENTTYPE = "CreditCard";
         const string DEFAULT_INTEREST = "ByIssuer";
         const string DEFAULT_IDENTITYTYPE = "CPF";
         const string DEFAULT_STATUS = "NEW";
+        const string DEFAULT_CURRENCY = "BRL";
 
         private readonly RestClient client;
+        private readonly string PAYMENT_COUNTRY;
         private readonly string MERCHANT_ID;
         private readonly string MERCHANT_KEY;
 
@@ -21,6 +24,7 @@ namespace RadixAPI.Providers.Cielo
             var settings = configuration.GetSection($"Providers:{nameof(Cielo)}");
             this.MERCHANT_KEY = settings[nameof(this.MERCHANT_KEY)];
             this.MERCHANT_ID = settings[nameof(this.MERCHANT_ID)];
+            this.PAYMENT_COUNTRY = settings[nameof(this.PAYMENT_COUNTRY)];
 
             this.client = new RestClient(settings["API_URL"]);
         }
@@ -40,27 +44,27 @@ namespace RadixAPI.Providers.Cielo
                 Customer = new CustomerModel {
                     Address = new CustomerAddressModel
                     {
-                        City = null,
+                        City = transactionRequest.BillingData.Address.City,
                         Complement = null,
-                        Country = null,
+                        Country = transactionRequest.BillingData.Address.Country,
                         Number = null,
-                        State = null,
+                        State = transactionRequest.BillingData.Address.State,
                         Street = null,
-                        ZipCode = null
+                        ZipCode = transactionRequest.BillingData.Address.ZipCode
                     },
                     Birthdate = DateTime.Now.ToShortDateString(), //TODO
                     DeliveryAddress = new CustomerDeliveryAddressModel {
-                        City =null,
+                        City = transactionRequest.ShippingData.Address.City,
                         Complement = null,
-                        Country = null,
-                        State = null,
+                        Country = transactionRequest.ShippingData.Address.Country,
+                        State = transactionRequest.ShippingData.Address.State,
                         Street = null,
-                        ZipCode = null
+                        ZipCode = transactionRequest.ShippingData.Address.ZipCode
                     },
-                    Email = null,
-                    Identity = null,
+                    Email = transactionRequest.Email,
+                    Identity = transactionRequest.CPF,
                     IdentityType = DEFAULT_IDENTITYTYPE,
-                    Name = null,
+                    Name = transactionRequest.CustomerName,
                     Status = DEFAULT_STATUS
                 },
                 MerchantId = Guid.NewGuid(),
@@ -70,14 +74,14 @@ namespace RadixAPI.Providers.Cielo
                     Amount = transactionRequest.Amount,
                     Authenticate = false,
                     Capture = false,
-                    Country = null,
-                    Currency = null,
+                    Country = PAYMENT_COUNTRY,
+                    Currency = DEFAULT_CURRENCY,
                     Installments = 1,
                     Interest = DEFAULT_INTEREST,
                     Provider = null,
                     ServiceTaxAmount = 0,
-                    SoftDescriptor = null,
-                    Type = null
+                    SoftDescriptor = transactionRequest.Descriptor,
+                    Type = DEFAULT_PAYMENTTYPE
                 },
                 RequestId = transactionId
             };

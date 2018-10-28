@@ -2,6 +2,7 @@
 using RadixAPI.Contract;
 using RadixAPI.Exceptions;
 using RestSharp;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -11,8 +12,10 @@ namespace RadixAPI.AntiFraud.ClearSale
     {
         private readonly RestClient client;
 
+        private const int DEFAULT_PAYMENTTYPEID = 1;
         private const string DEFAULT_ANALYSISLOCATION = "BRA";
         private const string ACCEPTABLE_STATUS = "APA";
+        private const string DEFAULT_CURRENCY = "BRL";
         private readonly string API_KEY;
         private readonly string CLIENT_ID;
         private readonly string CLIENT_SECRET;
@@ -54,6 +57,7 @@ namespace RadixAPI.AntiFraud.ClearSale
         {
             var request = new RestRequest("/order/send", Method.POST, DataFormat.Json);
 
+            if (!Enum.TryParse(typeof(CreditCardTypeEnum), transactionRequest.CreditCard.Brand, out var cardType)) cardType = CreditCardTypeEnum.Others;
             var requestSend = new RequestSendModel {
                 AnalysisLocation = DEFAULT_ANALYSISLOCATION,
                 ApiKey = API_KEY,
@@ -61,7 +65,73 @@ namespace RadixAPI.AntiFraud.ClearSale
                 Orders = new Collection<OrderModel>
                 {
                     new OrderModel{
-                        
+                        IP = transactionRequest.IP,
+                        BillingData = new PersonModel
+                        {
+                            Address = new AddressModel
+                            {
+                                City = transactionRequest.BillingData.Address.City,
+                                Country = transactionRequest.BillingData.Address.Country,
+                                State = transactionRequest.BillingData.Address.State,
+                                ZipCode = transactionRequest.BillingData.Address.ZipCode
+                            },
+                            BirthDate =  transactionRequest.BillingData.BirthDate,
+                            Email = transactionRequest.BillingData.Email,
+                            Gender = transactionRequest.BillingData.Gender,
+                            ID = transactionRequest.BillingData.ID,
+                            Name = transactionRequest.BillingData.Name,
+                            Phones = new Collection<PhoneModel>(transactionRequest.BillingData.Phones.Select(phone => new PhoneModel{
+                                    AreaCode = phone.AreaCode,
+                                    CountryCode = phone.CountryCode,
+                                    Number = phone.Number,
+                                    Type = TelephoneTypeEnum.Undefined
+                                }).ToList())
+                        },
+                        ShippingData = new PersonModel
+                        {
+                            Address = new AddressModel
+                            {
+                                City = transactionRequest.ShippingData.Address.City,
+                                Country = transactionRequest.ShippingData.Address.Country,
+                                State = transactionRequest.ShippingData.Address.State,
+                                ZipCode = transactionRequest.ShippingData.Address.ZipCode
+                            },
+                            BirthDate =  transactionRequest.ShippingData.BirthDate,
+                            Email = transactionRequest.ShippingData.Email,
+                            Gender = transactionRequest.ShippingData.Gender,
+                            ID = transactionRequest.ShippingData.ID,
+                            Name = transactionRequest.ShippingData.Name,
+                            Phones = new Collection<PhoneModel>(transactionRequest.ShippingData.Phones.Select(phone => new PhoneModel{
+                                    AreaCode = phone.AreaCode,
+                                    CountryCode = phone.CountryCode,
+                                    Number = phone.Number,
+                                    Type = TelephoneTypeEnum.Undefined
+                                }).ToList())
+                        },
+                        Currency = DEFAULT_CURRENCY,
+                        Date = DateTime.UtcNow,
+                        Email = transactionRequest.Email,
+                        ID = transactionRequest.TransactionId.ToString(),
+                        TotalShipping = 0,
+                        TotalOrder = transactionRequest.Amount,
+                        TotalItems = transactionRequest.Amount,
+                        Items = new Collection<ItemModel> { },
+                        Origin = transactionRequest.StoreName,
+                        Payments = new Collection<PaymentModel>
+                        {
+                            new PaymentModel
+                            {
+                                Amount = transactionRequest.Amount,
+                                CardBin = transactionRequest.CreditCard.CardNumber.Substring(0, 6),
+                                CardNumber = transactionRequest.CreditCard.CardNumber,
+                                CardExpirationDate = transactionRequest.CreditCard.ExpirationDate,
+                                CardHolderName = transactionRequest.CreditCard.Holder,
+                                CardType = (CreditCardTypeEnum)cardType,
+                                Date = DateTime.UtcNow,
+                                PaymentTypeId = DEFAULT_PAYMENTTYPEID,
+                                Type = PaymentTypeEnum.CREDIT_CARD
+                            }
+                        }
                     }
                 }
             };
