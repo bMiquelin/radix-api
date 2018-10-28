@@ -6,6 +6,6 @@ namespace RadixAPI.AntiFraud.ClearSale
     {
         public Collection<OrderStatusModel> Orders { get; set; }
 
-        public string Transactionid { get; set; }
+        public string TransactionId { get; set; }
     }
 }

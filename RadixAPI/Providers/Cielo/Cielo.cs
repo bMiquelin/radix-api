@@ -48,7 +48,7 @@ namespace RadixAPI.Providers.Cielo
                         Street = null,
                         ZipCode = null
                     },
-                    Birthdate = DateTime.Now, //TODO
+                    Birthdate = DateTime.Now.ToShortDateString(), //TODO
                     DeliveryAddress = new CustomerDeliveryAddressModel {
                         City =null,
                         Complement = null,
@@ -65,7 +65,7 @@ namespace RadixAPI.Providers.Cielo
                 },
                 MerchantId = Guid.NewGuid(),
                 MerchantKey = MERCHANT_KEY,
-                MerchantOrderId = transactionId.ToString("N"),
+                MerchantOrderId = transactionId.ToString(),
                 Payment = new PaymentModel {
                     Amount = transactionRequest.Amount,
                     Authenticate = false,
@@ -96,7 +96,7 @@ namespace RadixAPI.Providers.Cielo
 
         private IRestResponse<SalesResponseModel> Sales(SalesRequestModel srm)
         {
-            var request = new RestRequest($"/1/sales", Method.POST, DataFormat.Json);
+            var request = new RestRequest($"/sales", Method.POST, DataFormat.Json);
             request.AddBody(srm);
 
             return client.Execute<SalesResponseModel>(request);

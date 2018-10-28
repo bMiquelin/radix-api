@@ -7,7 +7,6 @@ namespace RadixAPI.Providers.Cielo
         /// <summary>
         /// Identificador da loja na Cielo.
         /// </summary>
-        [MaxLength(36)]
         [Required]
         public Guid MerchantId { get; set; }
 
@@ -21,7 +20,6 @@ namespace RadixAPI.Providers.Cielo
         /// <summary>
         /// Identificador do Request, utilizado quando o lojista usa diferentes servidores para cada GET/POST/PUT.
         /// </summary>
-        [MaxLength(36)]
         [Required]
         public Guid RequestId { get; set; }
 

@@ -14,7 +14,6 @@ namespace RadixAPI.Providers.Cielo
         /// <summary>
         /// Valor do Pedido (ser enviado em centavos).
         /// </summary>
-        [MaxLength(15)]
         [Required]
         public int Amount { get; set; }
 
@@ -33,13 +32,11 @@ namespace RadixAPI.Providers.Cielo
         /// <summary>
         /// Define comportamento do meio de pagamento (ver Anexo)/NÃO OBRIGATÓRIO PARA CRÉDITO.
         /// </summary>
-        [MaxLength(15)]
         public string Provider { get; set; }
 
         /// <summary>
         /// https://developercielo.github.io/manual/cielo-ecommerce#service-tax-amount-taxa-de-embarque
         /// </summary>
-        [MaxLength(15)]
         public int ServiceTaxAmount { get; set; }
 
         /// <summary>
@@ -52,7 +49,6 @@ namespace RadixAPI.Providers.Cielo
         /// <summary>
         /// Número de Parcelas.
         /// </summary>
-        [MaxLength(2)]
         [Required]
         public int Installments { get; set; }
 

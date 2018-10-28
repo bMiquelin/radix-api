@@ -19,7 +19,7 @@ namespace RadixAPI.Providers.Stone
         public DateTime? DueDate { get; set; }
         public int? ExternalTime { get; set; }
         public string PaymentMethodName { get; set; }
-        public int RefundedAmountInCents { get; set; }
+        public int? RefundedAmountInCents { get; set; }
         public bool Success { get; set; }
         public string TransactionIdentifier { get; set; }
         public string TransactionKey { get; set; }

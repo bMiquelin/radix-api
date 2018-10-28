@@ -40,7 +40,7 @@ namespace RadixAPI.Providers.Cielo
         /// Data de nascimento do Comprador.
         /// </summary>
         [MaxLength(10)]
-        public DateTime Birthdate { get; set; }
+        public string Birthdate { get; set; }
 
         public CustomerAddressModel Address { get; set; }
         public CustomerDeliveryAddressModel DeliveryAddress { get; set; }
