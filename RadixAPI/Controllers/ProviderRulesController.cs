@@ -19,16 +19,15 @@ namespace RadixAPI.Controllers
     public class ProviderRulesController : ControllerBase
     {
         private readonly RadixAPIContext ctx;
-        private readonly Guid storeId;
+        public Guid StoreId { get { return Guid.Parse(Request.Headers["STORE_ID"]); } }
         public ProviderRulesController(RadixAPIContext ctx)
         {
             this.ctx = ctx;
-            this.storeId = Guid.Parse(Request.Headers["STORE_ID"]);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<StoreProviderRule>> Get() => ctx.StoreProviderRules
-            .Where(rule => rule.Store.Id == this.storeId)
+            .Where(rule => rule.Store.Id == StoreId)
             .ToArray();
     }
 }

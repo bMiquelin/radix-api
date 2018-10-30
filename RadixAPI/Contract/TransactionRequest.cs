@@ -39,13 +39,13 @@ namespace RadixAPI.Contract
 
         [Required]
         [MaxLength(255)]
-        public string CustomerName { get; internal set; }
+        public string CustomerName { get; set; }
 
         /// <summary>
         /// Texto impresso na fatura bancaria comprador
         /// </summary>
         [MaxLength(13)]
         [Required]
-        public string Descriptor { get; internal set; }
+        public string Descriptor { get; set; }
     }
 }

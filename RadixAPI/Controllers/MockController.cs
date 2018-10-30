@@ -23,10 +23,10 @@ namespace RadixAPI.Controllers
         private readonly string[] status = { "APA", "SUS", "RPA" };
         [HttpPost]
         [Route("[controller]/order/[action]")]
-        public RadixAPI.AntiFraud.ClearSale.ResponseSend Send(RadixAPI.AntiFraud.ClearSale.RequestAuthModel request) => new RadixAPI.AntiFraud.ClearSale.ResponseSend
+        public RadixAPI.AntiFraud.ClearSale.ResponseSend Send(RadixAPI.AntiFraud.ClearSale.RequestSendModel request) => new RadixAPI.AntiFraud.ClearSale.ResponseSend
         {
             TransactionId = Guid.NewGuid().ToString(),
-            Orders = new System.Collections.ObjectModel.Collection<AntiFraud.ClearSale.OrderStatusModel>
+            Orders = new List<AntiFraud.ClearSale.OrderStatusModel>
             {
                 new AntiFraud.ClearSale.OrderStatusModel
                 {

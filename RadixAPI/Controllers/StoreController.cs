@@ -22,6 +22,7 @@ namespace RadixAPI.Controllers
         {
             this.ctx = ctx;
         }
+
         [HttpGet]
         [ServiceFilter(typeof(StoreAuthorization))]
         public ActionResult<Store> Get()

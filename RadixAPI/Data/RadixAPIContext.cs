@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RadixAPI.Model.Entity;
 
 namespace RadixAPI.Data

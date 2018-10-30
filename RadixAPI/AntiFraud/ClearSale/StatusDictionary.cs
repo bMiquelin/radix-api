@@ -23,10 +23,10 @@ namespace RadixAPI.AntiFraud.ClearSale
 
             // Incoming Status List*
             // *Attention: If an order is sent with a status, the order will be saved as history and will not be analyzed by ClearSale. Only orders with status 0 (NVO) or with no status will by analyzed
-            { "NVO", "New" },
-            { "APM", "Approved" },
-            { "CAN", "Cancelled by Client" },
-            { "RPM", "Denied" }
+            //{ "NVO", "New" },
+            //{ "APM", "Approved" },
+            //{ "CAN", "Cancelled by Client" },
+            //{ "RPM", "Denied" }
         };
     }
 }

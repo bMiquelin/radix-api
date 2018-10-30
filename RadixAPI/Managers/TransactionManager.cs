@@ -62,6 +62,7 @@ namespace RadixAPI.Managers
 
         public Transaction CreateTransaction(Store store, TransactionRequest transactionRequest)
         {
+            transactionRequest.StoreName = store.Name;
             var transaction = ctx.Transactions.Add(new Transaction
             {
                 Store = store,

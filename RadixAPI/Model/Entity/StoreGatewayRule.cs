@@ -10,6 +10,7 @@ namespace RadixAPI.Model.Entity
 {
     public class StoreProviderRule : DbEntity<int>
     {
+        [JsonIgnore]
         [Required]
         public Store Store { get; set; }
 
