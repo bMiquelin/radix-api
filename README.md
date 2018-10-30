@@ -18,10 +18,10 @@ Base URL: https://radix-api.azurewebsites.net/
 
     git clone https://gitlab.com/bMiquelin/radix-api.git
     dotnet ef database update --project RadixAPI --startup-project RadixAPI
-
-Need to check manually your `appsettinggs.json`, filling your Cielo, Stone and ClearSale API Keys, and replacing mock URL to real ones
-
     dotnet run --project RadixAPI
+
+Note¹: Need to check manually your `appsettings.json`, filling your Cielo, Stone and ClearSale API Keys, and replacing mock URL to real ones
+Note²: With the `ConnectionString` set to `Azure`, there is no need to `update-database`. There is no problem if you do so.
 
 ## To add Migrations:
 
